@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HEE Result Detail</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; border-top: 5px solid #2c3e50; }
+        .row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .label { font-weight: bold; color: #555; }
+        .status { font-weight: bold; font-size: 1.2rem; text-align: center; margin-top: 20px; }
+        .pass { color: green; }
+        .fail { color: red; }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContent">
+        <h2>HEE Official Statement of Marks</h2>
+        <div id="resultBody"></div>
+        <button onclick="window.history.back()" style="margin-top: 20px;">Back to Search</button>
+    </div>
+
+    <script>
+        // 1. DATA SECTION (Add more students here)
+        const studentData = {
+            "101": { name: "Aarav Sharma", marks: 54, rank: 1, status: "QUALIFIED" },
+            "102": { name: "Sanya Iyer", marks: 42, rank: 15, status: "QUALIFIED" },
+            "103": { name: "John Doe", marks: 15, rank: 120, status: "NOT QUALIFIED" }
+        };
+
+        // 2. LOGIC SECTION
+        const urlParams = new URLSearchParams(window.location.search);
+        const roll = urlParams.get('roll');
+        const student = studentData[roll];
+        const display = document.getElementById('resultBody');
+
+        if (student) {
+            // Calculations
+            const maxMarks = 60;
+            const percentage = ((student.marks / maxMarks) * 100).toFixed(2);
+            
+            // Simplified Percentile (In reality, this requires the total number of students)
+            // Here we assume a hypothetical total of 200 students for the calculation
+            const totalStudents = 200;
+            const percentile = (((totalStudents - student.rank) / totalStudents) * 100).toFixed(2);
+
+            display.innerHTML = `
+                <div class="row"><span class="label">Name:</span> <span>${student.name}</span></div>
+                <div class="row"><span class="label">Roll No:</span> <span>${roll}</span></div>
+                <div class="row"><span class="label">Marks:</span> <span>${student.marks} / ${maxMarks}</span></div>
+                <div class="row"><span class="label">Percentage:</span> <span>${percentage}%</span></div>
+                <div class="row"><span class="label">Rank:</span> <span>${student.rank}</span></div>
+                <div class="row"><span class="label">Percentile:</span> <span>${percentile}</span></div>
+                <div class="status ${student.status === 'QUALIFIED' ? 'pass' : 'fail'}">
+                    ${student.status}
+                </div>
+            `;
+        } else {
+            display.innerHTML = "<p>Roll Number not found. Please try again.</p>";
+        }
+    </script>
+</body>
+</html>
